@@ -11,27 +11,28 @@ import (
 )
 
 type Store interface {
-	Save(user models.User) error
+	Save(user *models.User) error
 	CheckEmail(email string) (*models.User, error)
 }
 
 type Conn struct {
-	DB *bun.DB
+	DB  *bun.DB
+	Ctx context.Context
 }
 
 func NewConn(db *bun.DB) Conn {
+	ctx := context.Background()
 	return Conn{
-		DB: db,
+		DB:  db,
+		Ctx: ctx,
 	}
 }
 
 // Save saves new user details to DB
 func (c *Conn) Save(user *models.User) error {
-	ctx := context.Background()
-
 	_, err := c.DB.NewInsert().
 		Model(user).Returning("user_Id, email, role").
-		Exec(ctx)
+		Exec(c.Ctx)
 
 	if err != nil {
 		return fmt.Errorf("failed to insert user: %w", err)
@@ -42,13 +43,12 @@ func (c *Conn) Save(user *models.User) error {
 
 // CheckEmail checks for already used Email
 func (c *Conn) CheckEmail(email string) (*models.User, error) {
-	ctx := context.Background()
 	user := new(models.User)
 
 	err := c.DB.NewSelect().
 		Model(user).
 		Where("email = ?", email).Limit(1).
-		Scan(ctx)
+		Scan(c.Ctx)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
