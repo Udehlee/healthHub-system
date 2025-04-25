@@ -54,11 +54,36 @@ func (h *Handler) Register(c *gin.Context) {
 		Address:   RegisterReq.Address,
 	}
 
-	err = h.Db.Save(newUser)
+	err = h.Db.Save(&newUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "successfully saved user"})
+}
+
+// Login logs in an existing user
+func (h *Handler) Login(c *gin.Context) {
+	var LoginReq models.LoginRequest
+
+	err := c.ShouldBindJSON(&LoginReq)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to bind login request"})
+		return
+	}
+
+	user, err := h.Db.CheckEmail(LoginReq.Email)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found, create an account"})
+		return
+	}
+
+	err = utility.ComparePasswordHash(user.Password, LoginReq.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong password"})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": " logged in sucessefully"})
+
 }
