@@ -13,7 +13,7 @@ import (
 	"github.com/uptrace/bun/migrate"
 )
 
-//go:embed *.sql
+//go:embed migrations/*.sql
 var migrationsFiles embed.FS
 
 func ConnectDB() (*bun.DB, error) {
@@ -51,7 +51,7 @@ func RunMigrations(db *bun.DB) error {
 		return err
 	}
 
-	log.Println(" Migrations ran successfully")
+	log.Println(" Migrations applied successfully")
 	return nil
 }
 
