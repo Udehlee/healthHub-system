@@ -9,10 +9,10 @@ type User struct {
 	FirstName string `bun:"firstname" json:"firstname"`
 	LastName  string `bun:"lastname" json:"lastname"`
 	Email     string `bun:"email" json:"email"`
-	Password  string `bun:"password" json:"password"`
-	Role      string `bun:"role" json:"role"`
+	Password  string `bun:"password" json:"pass_word"`
+	Role      string `bun:"role" json:"user_role"`
 	Gender    string `bun:"gender" json:"gender"`
-	Address   string `bun:"address" json:"address"`
+	Address   string `bun:"address" json:"user_address"`
 }
 
 type LoginRequest struct {
