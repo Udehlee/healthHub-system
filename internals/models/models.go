@@ -1,6 +1,9 @@
 package models
 
-import "github.com/uptrace/bun"
+import (
+	"github.com/golang-jwt/jwt"
+	"github.com/uptrace/bun"
+)
 
 type User struct {
 	bun.BaseModel `bun:"table:users"`
@@ -18,4 +21,11 @@ type User struct {
 type LoginRequest struct {
 	Email    string `bun:"email" json:"email"`
 	Password string `bun:"password" json:"password"`
+}
+
+type Claims struct {
+	ID    int64
+	Email string
+	Role  string
+	jwt.StandardClaims
 }
