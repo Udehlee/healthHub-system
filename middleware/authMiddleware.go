@@ -60,7 +60,7 @@ func validateToken(tokenString string, secretKey []byte) (jwt.MapClaims, error) 
 }
 
 // RoleMiddleware checks if the user's role from JWT claims matches allowed roles
-func RoleMiddleware(allowedRoles ...string) gin.HandlerFunc {
+func Role(allowedRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims := c.MustGet("claims").(jwt.MapClaims)
 		role := claims["role"].(string)
