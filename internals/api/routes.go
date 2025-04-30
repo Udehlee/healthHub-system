@@ -13,16 +13,16 @@ func Routes(r *gin.Engine, h *api.Handler) {
 
 	//admin routes
 	adminRoutes := r.Group("/admin")
-	adminRoutes.Use(middleware.AuthMiddleware(), middleware.RoleMiddleware("admin"))
+	adminRoutes.Use(middleware.AuthMiddleware(), middleware.Role("admin"))
 	{
-		adminRoutes.POST("/assign-patient-to-staff", h.AdminAssign)
-		adminRoutes.GET("/Get-all-users", h.GetAllUsers)
+		adminRoutes.PUT("/appointments/:appointment_id", h.AdminAssign)
+		adminRoutes.GET("/users", h.GetAllUsers)
 	}
 
 	//deafult user(patient)
 	userRoutes := r.Group("/user")
-	userRoutes.Use(middleware.AuthMiddleware(), middleware.RoleMiddleware("patient"))
+	userRoutes.Use(middleware.AuthMiddleware(), middleware.Role("patient"))
 	{
-		userRoutes.POST("/book-appointment", h.BookAppointment)
+		userRoutes.POST("/appointments/book-appointment", h.BookAppointment)
 	}
 }
