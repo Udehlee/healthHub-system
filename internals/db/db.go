@@ -13,6 +13,8 @@ import (
 type Store interface {
 	Save(user *models.User) error
 	CheckEmail(email string) (*models.User, error)
+	GetAllUsers() ([]*models.User, error)
+	SaveAppointment(appointment *models.Appointment) error
 }
 
 type Conn struct {
@@ -58,4 +60,31 @@ func (c *Conn) CheckEmail(email string) (*models.User, error) {
 	}
 
 	return user, nil
+}
+
+// GetAllUsers retieves all users from database
+func (c *Conn) GetAllUsers() ([]*models.User, error) {
+	var users []*models.User
+
+	err := c.DB.NewSelect().
+		Model(&users).
+		Scan(c.Ctx)
+	if err != nil {
+		return []*models.User{}, fmt.Errorf("error fetching all users: %w", err)
+	}
+	return users, nil
+
+}
+
+// SaveAppointment Saves appointment details
+func (c *Conn) SaveAppointment(appointment *models.Appointment) error {
+	_, err := c.DB.NewInsert().
+		Model(appointment).Returning("patient_Id, status_").
+		Exec(c.Ctx)
+
+	if err != nil {
+		return fmt.Errorf("failed to insert appoinment details: %w", err)
+	}
+
+	return nil
 }
