@@ -15,6 +15,7 @@ type Store interface {
 	CheckEmail(email string) (*models.User, error)
 	GetAllUsers() ([]*models.User, error)
 	SaveAppointment(appointment *models.Appointment) error
+	AssignStaff(appointmentID int64, appointment *models.Appointment) error
 }
 
 type Conn struct {
@@ -86,5 +87,21 @@ func (c *Conn) SaveAppointment(appointment *models.Appointment) error {
 		return fmt.Errorf("failed to insert appoinment details: %w", err)
 	}
 
+	return nil
+}
+
+// AssignStaff updates the appointment table  with the given staff ID,Role and assignedby fields
+func (c *Conn) AssignStaff(appointmentID int64, appointment *models.Appointment) error {
+	_, err := c.DB.NewUpdate().
+		Model(appointment).
+		Set("staff_id = ?", appointment.StaffID).
+		Set("staff_role = ?", appointment.StaffRole).
+		Set("assigned_by = ?", appointment.AssignedBy).
+		Where("appointment_id = ?", appointmentID).
+		Exec(c.Ctx)
+
+	if err != nil {
+		return fmt.Errorf("failed to assign appoinment details: %w", err)
+	}
 	return nil
 }
