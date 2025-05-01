@@ -15,7 +15,7 @@ func Routes(r *gin.Engine, h *api.Handler) {
 	adminRoutes := r.Group("/admin")
 	adminRoutes.Use(middleware.AuthMiddleware(), middleware.Role("admin"))
 	{
-		adminRoutes.PUT("/appointments/:appointment_id", h.AdminAssign)
+		adminRoutes.PATCH("/appointments/:id", h.AdminAssign)
 		adminRoutes.GET("/users", h.GetAllUsers)
 	}
 
