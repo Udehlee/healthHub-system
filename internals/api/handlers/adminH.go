@@ -26,7 +26,7 @@ func (h *Handler) AdminAssign(c *gin.Context) {
 	appointment := &models.Appointment{
 		StaffID:    assignReq.StaffID,
 		StaffRole:  assignReq.StaffRole,
-		Status:     "assigned",
+		Status:     assignReq.Status,
 		AssignedBy: &adminID,
 	}
 
