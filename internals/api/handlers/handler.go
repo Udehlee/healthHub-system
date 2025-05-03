@@ -44,12 +44,13 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 
+	defaultRole := &models.Role{RoleName: "patient"}
 	newUser := models.User{
 		FirstName: RegisterReq.FirstName,
 		LastName:  RegisterReq.LastName,
 		Email:     RegisterReq.Email,
 		Password:  hashedpwd,
-		Role:      "patient", //Default role upon registration
+		Role:      defaultRole, // Assign the Role instance here
 		Gender:    RegisterReq.Gender,
 		Address:   RegisterReq.Address,
 	}

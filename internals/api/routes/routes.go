@@ -1,4 +1,4 @@
-package api
+package routes
 
 import (
 	api "github.com/Udehlee/healthHub-System/internals/api/handlers"
@@ -24,5 +24,11 @@ func Routes(r *gin.Engine, h *api.Handler) {
 	userRoutes.Use(middleware.AuthMiddleware(), middleware.Role("patient"))
 	{
 		userRoutes.POST("/appointments/book-appointment", h.BookAppointment)
+	}
+
+	staffRoutes := r.Group("/staff")
+	staffRoutes.Use(middleware.AuthMiddleware(), middleware.Role("staff"))
+	{
+		staffRoutes.GET("/appointments/assigned", h.ViewAssigned)
 	}
 }
