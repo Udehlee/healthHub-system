@@ -16,7 +16,7 @@ func GenerateJWT(user models.User) (string, error) {
 	claims := models.Claims{
 		ID:    user.UserID,
 		Email: user.Email,
-		Role:  user.Role,
+		Role:  user.Role.RoleName,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 12).Unix(), // Token expires in 12 hours
 			IssuedAt:  time.Now().Unix(),
