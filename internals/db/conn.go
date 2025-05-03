@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"embed"
+	"fmt"
 	"log"
 	"os"
 
@@ -56,13 +57,11 @@ func RunMigrations(db *bun.DB) error {
 }
 
 func InitDB() (*Conn, error) {
-	conn := Conn{}
-
 	db, err := ConnectDB()
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return nil, fmt.Errorf("error connecting to DB: %w", err)
 	}
-	conn.DB = db
-	return &conn, nil
+
+	conn := NewConn(db)
+	return conn, nil
 }

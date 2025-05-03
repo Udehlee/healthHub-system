@@ -16,6 +16,7 @@ type Store interface {
 	GetAllUsers() ([]*models.User, error)
 	SaveAppointment(appointment *models.Appointment) error
 	AssignStaff(appointmentID int64, appointment *models.Appointment) error
+	GetAssignedAppointments() ([]*models.Appointment, error)
 }
 
 type Conn struct {
@@ -23,9 +24,9 @@ type Conn struct {
 	Ctx context.Context
 }
 
-func NewConn(db *bun.DB) Conn {
+func NewConn(db *bun.DB) *Conn {
 	ctx := context.Background()
-	return Conn{
+	return &Conn{
 		DB:  db,
 		Ctx: ctx,
 	}
@@ -101,7 +102,22 @@ func (c *Conn) AssignStaff(appointmentID int64, appointment *models.Appointment)
 		Exec(c.Ctx)
 
 	if err != nil {
-		return fmt.Errorf("failed to assign appoinment details: %w", err)
+		return fmt.Errorf("failed to assign appointment details: %w", err)
 	}
 	return nil
+}
+
+// GetAssignedAppointments returns all assigned appointment details from db
+func (c *Conn) GetAssignedAppointments() ([]*models.Appointment, error) {
+	var appointments []*models.Appointment
+
+	err := c.DB.NewSelect().
+		Model(&appointments).
+		Where("status = ?", "assigned").
+		Scan(c.Ctx)
+
+	if err != nil {
+		return []*models.Appointment{}, fmt.Errorf("failed to get assigned appoinment: %w", err)
+	}
+	return appointments, nil
 }
