@@ -32,6 +32,8 @@ func ConnectDB() (*bun.DB, error) {
 	if err != nil {
 		log.Printf("failed to connect to database: %v", err)
 	}
+
+	log.Println("connected successfully")
 	return db, nil
 }
 
