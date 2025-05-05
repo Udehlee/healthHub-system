@@ -1,4 +1,4 @@
-CREATE TABLE appointments (
+CREATE TABLE appointments(
     appointment_id BIGSERIAL PRIMARY KEY,
     patient_id     INT NOT NULL,
     staff_id       INT,
