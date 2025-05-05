@@ -19,6 +19,10 @@ func NewHandler(db db.Store) *Handler {
 	}
 }
 
+func (h *Handler) Index(c *gin.Context) {
+	c.String(200, "Welcome Home")
+}
+
 // Register creates a new user account
 func (h *Handler) Register(c *gin.Context) {
 	var RegisterReq models.User
@@ -50,7 +54,7 @@ func (h *Handler) Register(c *gin.Context) {
 		LastName:  RegisterReq.LastName,
 		Email:     RegisterReq.Email,
 		Password:  hashedpwd,
-		Role:      defaultRole, // Assign the Role instance here
+		Role:      defaultRole,
 		Gender:    RegisterReq.Gender,
 		Address:   RegisterReq.Address,
 	}

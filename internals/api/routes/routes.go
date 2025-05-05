@@ -7,7 +7,7 @@ import (
 )
 
 func Routes(r *gin.Engine, h *api.Handler) {
-
+	r.GET("/", h.Index)
 	r.POST("/api/register", h.Register)
 	r.POST("/api/login", h.Login)
 
