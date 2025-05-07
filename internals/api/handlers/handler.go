@@ -1,10 +1,13 @@
 package api
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/Udehlee/healthHub-System/internals/db"
 	"github.com/Udehlee/healthHub-System/internals/models"
+	"github.com/Udehlee/healthHub-System/middleware"
 	"github.com/Udehlee/healthHub-System/utility"
 	"github.com/gin-gonic/gin"
 )
@@ -27,18 +30,8 @@ func (h *Handler) Index(c *gin.Context) {
 func (h *Handler) Register(c *gin.Context) {
 	var RegisterReq models.User
 
-	err := c.ShouldBindJSON(&RegisterReq)
-	if err != nil {
+	if err := c.ShouldBindJSON(&RegisterReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to bind register request"})
-		return
-	}
-
-	Email, err := h.Db.CheckEmail(RegisterReq.Email)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB error"})
-	}
-	if Email != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "email already in use"})
 		return
 	}
 
@@ -48,24 +41,41 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 
-	defaultRole := &models.Role{RoleName: "patient"}
 	newUser := models.User{
 		FirstName: RegisterReq.FirstName,
 		LastName:  RegisterReq.LastName,
 		Email:     RegisterReq.Email,
 		Password:  hashedpwd,
-		Role:      defaultRole,
+		Role:      "",
 		Gender:    RegisterReq.Gender,
 		Address:   RegisterReq.Address,
 	}
 
-	err = h.Db.Save(&newUser)
-	if err != nil {
+	if err := h.Db.Save(&newUser); err != nil {
+		log.Printf("saving error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save user"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "successfully saved user"})
+	token, err := middleware.GenerateJWT(&newUser)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "user created successfully",
+		"token":   token,
+		"user": gin.H{
+			"id":        newUser.UserID,
+			"firstname": newUser.FirstName,
+			"lastname":  newUser.LastName,
+			"email":     newUser.Email,
+			"gender":    newUser.Gender,
+			"address":   newUser.Address,
+			"role":      newUser.Role,
+		},
+	})
 }
 
 // Login logs in an existing user
@@ -86,9 +96,26 @@ func (h *Handler) Login(c *gin.Context) {
 
 	err = utility.ComparePasswordHash(user.Password, LoginReq.Password)
 	if err != nil {
+		fmt.Printf("Error in ComparePasswordHash: %v\n", err) // Logging the error
 		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong password"})
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": " logged in sucessefully"})
+	accesstoken, err := middleware.GenerateJWT(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate access token"})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{
+		"message": "logged in successfully",
+		"token":   accesstoken,
+		"user": gin.H{
+			"id":        user.UserID,
+			"firstname": user.FirstName,
+			"lastname":  user.LastName,
+			"email":     user.Email,
+			"role":      user.Role,
+		},
+	})
 }
