@@ -15,11 +15,9 @@ type User struct {
 	LastName  string `bun:"lastname,notnull" json:"lastname"`
 	Email     string `bun:"email,unique,notnull" json:"email"`
 	Password  string `bun:"pass_word,notnull" json:"pass_word"`
-	RoleID    int64  `bun:"role_id,notnull" json:"role_id"`
+	Role      string `bun:"user_role,notnull,default:'patient'" json:"user_role"`
 	Gender    string `bun:"gender" json:"gender"`
 	Address   string `bun:"user_address" json:"user_address"`
-
-	Role *Role `bun:"rel:belongs-to,join:role_id=role_id" json:"role,omitempty"`
 }
 
 type Appointment struct {
@@ -28,17 +26,9 @@ type Appointment struct {
 	AppointmentID int64     `bun:"appointment_id,pk,autoincrement" json:"appointment_id"`
 	PatientID     int64     `bun:"patient_id,notnull" json:"patient_id"`
 	StaffID       *int64    `bun:"staff_id,nullzero" json:"staff_id,omitempty"`
-	StaffRole     *int64    `bun:"staff_role,nullzero" json:"staff_role,omitempty"`
 	Status        string    `bun:"status_,notnull" json:"status"`
 	CreatedAt     time.Time `bun:"created_at,default:current_timestamp" json:"created_at"`
 	AssignedBy    *int64    `bun:"assigned_by,nullzero" json:"assigned_by,omitempty"`
-}
-
-type Role struct {
-	bun.BaseModel `bun:"table:roles"`
-
-	RoleID   int64  `bun:"role_id,pk,autoincrement" json:"role_id"`
-	RoleName string `bun:"role_name,unique,notnull" json:"role_name"`
 }
 
 type AppointmentRequest struct {
@@ -54,12 +44,12 @@ type AssignRequest struct {
 
 type LoginRequest struct {
 	Email    string `bun:"email" json:"email"`
-	Password string `bun:"password" json:"password"`
+	Password string `bun:"password" json:"pass_word"`
 }
 
 type Claims struct {
-	ID    int64
-	Email string
-	Role  string
+	ID    int64  `json:"id"`
+	Email string `json:"email"`
+	Role  string `json:"role"`
 	jwt.StandardClaims
 }
