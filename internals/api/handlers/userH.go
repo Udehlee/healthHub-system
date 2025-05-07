@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Udehlee/healthHub-System/internals/models"
@@ -24,8 +25,9 @@ func (h *Handler) BookAppointment(c *gin.Context) {
 
 	err = h.Db.SaveAppointment(&Appointment)
 	if err != nil {
+		log.Printf("Error saving appointment: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to book appointment"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"error": "appointment successfully booked"})
+	c.JSON(http.StatusOK, gin.H{"message": "appointment successfully booked"})
 }
