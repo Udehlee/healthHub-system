@@ -35,7 +35,7 @@ func NewConn(db *bun.DB) *Conn {
 // Save saves new user details to DB
 func (c *Conn) Save(user *models.User) error {
 	_, err := c.DB.NewInsert().
-		Model(user).Returning("user_Id, email, role").
+		Model(user).Returning("user_Id, email, user_role").
 		Exec(c.Ctx)
 
 	if err != nil {
@@ -51,14 +51,16 @@ func (c *Conn) CheckEmail(email string) (*models.User, error) {
 
 	err := c.DB.NewSelect().
 		Model(user).
-		Where("email = ?", email).Limit(1).
+		Column("user_id", "email", "pass_word", "user_role").
+		Where("email = ?", email).
+		Limit(1).
 		Scan(c.Ctx)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return nil, nil // email not taken
 		}
-		return nil, fmt.Errorf("error fetching user: %w", err)
+		return nil, fmt.Errorf("error checking email: %w", err)
 	}
 
 	return user, nil
@@ -81,7 +83,7 @@ func (c *Conn) GetAllUsers() ([]*models.User, error) {
 // SaveAppointment Saves appointment details
 func (c *Conn) SaveAppointment(appointment *models.Appointment) error {
 	_, err := c.DB.NewInsert().
-		Model(appointment).Returning("patient_Id, status_").
+		Model(appointment).Returning("patient_id, status_").
 		Exec(c.Ctx)
 
 	if err != nil {
@@ -96,7 +98,7 @@ func (c *Conn) AssignStaff(appointmentID int64, appointment *models.Appointment)
 	_, err := c.DB.NewUpdate().
 		Model(appointment).
 		Set("staff_id = ?", appointment.StaffID).
-		Set("staff_role = ?", appointment.StaffRole).
+		// Set("staff_role = ?", appointment.StaffRole).
 		Set("assigned_by = ?", appointment.AssignedBy).
 		Where("appointment_id = ?", appointmentID).
 		Exec(c.Ctx)
