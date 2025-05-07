@@ -12,11 +12,11 @@ import (
 var JWTKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // GenerateJWT generates token
-func GenerateJWT(user models.User) (string, error) {
+func GenerateJWT(user *models.User) (string, error) {
 	claims := models.Claims{
 		ID:    user.UserID,
 		Email: user.Email,
-		Role:  user.Role.RoleName,
+		Role:  user.Role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 12).Unix(), // Token expires in 12 hours
 			IssuedAt:  time.Now().Unix(),

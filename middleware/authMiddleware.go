@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Udehlee/healthHub-System/internals/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
@@ -16,7 +17,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		token := c.GetHeader("Authorization")
 
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorisation  token is not provided"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not provided"})
 			c.Abort()
 			return
 		}
@@ -30,19 +31,21 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("email", claims["email"])
-		c.Set("role", claims["role"])
+		c.Set("claims", claims)
+		c.Set("email", claims.Email)
+		c.Set("role", claims.Role)
 		c.Next()
-
 	}
 }
 
 // validateToken checks if the token is valid
 // returns its claims.
-func validateToken(tokenString string, secretKey []byte) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+func validateToken(tokenString string, secretKey []byte) (*models.Claims, error) {
+	claims := &models.Claims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return secretKey, nil
 	})
@@ -51,19 +54,14 @@ func validateToken(tokenString string, secretKey []byte) (jwt.MapClaims, error) 
 		return nil, fmt.Errorf("invalid or expired token")
 	}
 
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return nil, fmt.Errorf("failed to parse claims")
-	}
-
 	return claims, nil
 }
 
 // RoleMiddleware checks if the user's role from JWT claims matches allowed roles
 func Role(allowedRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claims := c.MustGet("claims").(jwt.MapClaims)
-		role := claims["role"].(string)
+		claims := c.MustGet("claims").(*models.Claims)
+		role := claims.Role
 
 		for _, r := range allowedRoles {
 			if role == r {
