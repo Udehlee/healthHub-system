@@ -1,0 +1,2 @@
+ALTER TABLE users ADD COLUMN user_role VARCHAR(50) NOT NULL DEFAULT 'patient';
+

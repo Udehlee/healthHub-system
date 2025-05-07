@@ -10,3 +10,4 @@ CREATE TABLE appointments(
     FOREIGN KEY (staff_id)    REFERENCES users(user_id),
     FOREIGN KEY (assigned_by) REFERENCES users(user_id)
 );
+
