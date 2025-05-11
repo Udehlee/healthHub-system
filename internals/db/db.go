@@ -72,12 +72,12 @@ func (c *Conn) GetAllUsers() ([]*models.User, error) {
 
 	err := c.DB.NewSelect().
 		Model(&users).
+		Column("user_id", "firstname", "lastname", "email", "user_role", "gender", "user_address").
 		Scan(c.Ctx)
 	if err != nil {
-		return []*models.User{}, fmt.Errorf("error fetching all users: %w", err)
+		return nil, fmt.Errorf("error fetching all users: %w", err)
 	}
 	return users, nil
-
 }
 
 // SaveAppointment Saves appointment details
@@ -98,12 +98,15 @@ func (c *Conn) AssignStaff(appointmentID int64, appointment *models.Appointment)
 	_, err := c.DB.NewUpdate().
 		Model(appointment).
 		Set("staff_id = ?", appointment.StaffID).
+		Set("status_ = ?", appointment.Status).
 		// Set("staff_role = ?", appointment.StaffRole).
 		Set("assigned_by = ?", appointment.AssignedBy).
 		Where("appointment_id = ?", appointmentID).
 		Exec(c.Ctx)
 
 	if err != nil {
+		fmt.Printf("Error in AssignStaff for appointmentID %d: %v\n", appointmentID, err)
+
 		return fmt.Errorf("failed to assign appointment details: %w", err)
 	}
 	return nil
