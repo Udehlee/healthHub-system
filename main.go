@@ -3,13 +3,16 @@ package main
 import (
 	"log"
 
-	"github.com/Udehlee/healthHub-System/internals/api"
+	api "github.com/Udehlee/healthHub-System/internals/api/handlers"
+	"github.com/Udehlee/healthHub-System/internals/api/routes"
 	"github.com/Udehlee/healthHub-System/internals/db"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
+
 	r := gin.Default()
 	loadEnv()
 
@@ -22,7 +25,7 @@ func main() {
 	conn.Save(&admin)
 
 	h := api.NewHandler(conn)
-	api.Routes(r, h)
+	routes.Routes(r, h)
 
 	if err := r.Run(); err != nil {
 		log.Fatalf("could not start server: %v", err)
