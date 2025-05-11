@@ -37,9 +37,9 @@ type AppointmentRequest struct {
 }
 
 type AssignRequest struct {
-	StaffID   *int64 `bun:"user_id,nullzero" json:"user_id,omitempty"`
-	StaffRole *int64 `bun:"user_role,nullzero" json:"user_role,omitempty"`
-	Status    string `bun:"status_" json:"status_"`
+	StaffID *int64 `bun:"user_id,nullzero" json:"user_id,omitempty"`
+	// StaffRole *int64 `bun:"user_role,nullzero" json:"user_role,omitempty"`
+	Status string `bun:"status_" json:"status_"`
 }
 
 type LoginRequest struct {
