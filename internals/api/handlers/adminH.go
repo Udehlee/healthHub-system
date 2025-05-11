@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Udehlee/healthHub-System/internals/models"
@@ -10,8 +11,9 @@ import (
 
 // AdminAssign assigns a staff to a specific appointment.
 func (h *Handler) AdminAssign(c *gin.Context) {
-	appointmentID, err := utility.GetParamInt64(c, "appointment_id")
+	appointmentID, err := utility.GetParamInt64(c, "id")
 	if err != nil {
+		fmt.Println("Appointment ID param:", appointmentID)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid appointment ID"})
 		return
 	}
@@ -23,6 +25,10 @@ func (h *Handler) AdminAssign(c *gin.Context) {
 	}
 
 	adminID := c.GetInt64("user_id")
+	if adminID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid admin ID"})
+		return
+	}
 	appointment := &models.Appointment{
 		StaffID: assignReq.StaffID,
 		// StaffRole:  assignReq.StaffRole,
@@ -36,7 +42,10 @@ func (h *Handler) AdminAssign(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "staff successfully assigned"})
+	c.JSON(http.StatusOK, gin.H{
+		"message":      "staff successfully assigned",
+		"appointments": appointment,
+	})
 }
 
 // GetAllUsers retrieves all users
