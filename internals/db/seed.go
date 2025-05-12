@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
-	"github.com/Udehlee/healthHub-System/utility"
+	"github.com/Udehlee/healthcare-Access/internals/models"
+	"github.com/Udehlee/healthcare-Access/utility"
 )
 
 func SeedData() models.User {

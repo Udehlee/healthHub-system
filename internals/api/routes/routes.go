@@ -1,8 +1,8 @@
 package routes
 
 import (
-	api "github.com/Udehlee/healthHub-System/internals/api/handlers"
-	"github.com/Udehlee/healthHub-System/middleware"
+	api "github.com/Udehlee/healthcare-Access/internals/api/handlers"
+	"github.com/Udehlee/healthcare-Access/middleware"
 	"github.com/gin-gonic/gin"
 )
 

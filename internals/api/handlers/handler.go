@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Udehlee/healthHub-System/internals/db"
-	"github.com/Udehlee/healthHub-System/internals/models"
-	"github.com/Udehlee/healthHub-System/middleware"
-	"github.com/Udehlee/healthHub-System/utility"
+	"github.com/Udehlee/healthcare-Access/internals/db"
+	"github.com/Udehlee/healthcare-Access/internals/models"
+	"github.com/Udehlee/healthcare-Access/middleware"
+	"github.com/Udehlee/healthcare-Access/utility"
 	"github.com/gin-gonic/gin"
 )
 

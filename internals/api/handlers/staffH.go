@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ViewAssigned retrieves all assigned appointments.
+// ViewAssigned views all the assigned appointments
 func (h *Handler) ViewAssigned(c *gin.Context) {
 	appointments, err := h.Db.GetAssignedAppointments()
 	if err != nil {

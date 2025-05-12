@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
+	"github.com/Udehlee/healthcare-Access/internals/models"
 	"github.com/golang-jwt/jwt"
 )
 

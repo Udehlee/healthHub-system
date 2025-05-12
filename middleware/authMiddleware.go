@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
+	"github.com/Udehlee/healthcare-Access/internals/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
@@ -58,7 +58,7 @@ func validateToken(tokenString string, secretKey []byte) (*models.Claims, error)
 	return claims, nil
 }
 
-// RoleMiddleware checks if the user's role from JWT claims matches allowed roles
+// Role checks if the user's role from JWT claims matches allowed roles
 func Role(allowedRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims := c.MustGet("claims").(*models.Claims)

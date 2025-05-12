@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
-	"github.com/Udehlee/healthHub-System/middleware"
+	"github.com/Udehlee/healthcare-Access/internals/models"
+	"github.com/Udehlee/healthcare-Access/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"

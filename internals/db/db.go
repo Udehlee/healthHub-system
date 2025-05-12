@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
+	"github.com/Udehlee/healthcare-Access/internals/models"
 	"github.com/uptrace/bun"
 )
 

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Udehlee/healthHub-System/internals/models"
+	"github.com/Udehlee/healthcare-Access/internals/models"
 	"github.com/gin-gonic/gin"
 )
 

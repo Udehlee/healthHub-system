@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	api "github.com/Udehlee/healthHub-System/internals/api/handlers"
-	"github.com/Udehlee/healthHub-System/internals/models"
-	"github.com/Udehlee/healthHub-System/utility"
+	api "github.com/Udehlee/healthcare-Access/internals/api/handlers"
+	"github.com/Udehlee/healthcare-Access/internals/models"
+	"github.com/Udehlee/healthcare-Access/utility"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

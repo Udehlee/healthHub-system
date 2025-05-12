@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	api "github.com/Udehlee/healthHub-System/internals/api/handlers"
-	"github.com/Udehlee/healthHub-System/internals/api/routes"
-	"github.com/Udehlee/healthHub-System/internals/db"
+	api "github.com/Udehlee/healthcare-Access/internals/api/handlers"
+	"github.com/Udehlee/healthcare-Access/internals/api/routes"
+	"github.com/Udehlee/healthcare-Access/internals/db"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -34,7 +34,7 @@ func main() {
 }
 
 func loadEnv() {
-	err := godotenv.Load()
+	err := godotenv.Load("")
 	if err != nil {
 		log.Fatal("failed to load .env file")
 	}
