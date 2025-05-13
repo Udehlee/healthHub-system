@@ -96,12 +96,7 @@ func TestRegister(t *testing.T) {
 			router := gin.Default()
 			router.POST("/register", handler.Register)
 
-			var body []byte
-			if str, ok := tt.requestBody.(string); ok {
-				body = []byte(str)
-			} else {
-				body, _ = json.Marshal(tt.requestBody)
-			}
+			body, _ := json.Marshal(tt.requestBody)
 
 			req, _ := http.NewRequest("POST", "/register", bytes.NewBuffer(body))
 			req.Header.Set("Content-Type", "application/json")
