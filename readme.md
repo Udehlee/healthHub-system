@@ -1,5 +1,5 @@
 ## healthcare-Access
-Healthcare-Access is a simple role-based access control (RBAC) app that shows how users can only perform specific tasks based on their assigned roles. During registration, a default role(patient) is assigned if not specified .
+Healthcare-Access is a simple role-based access control (RBAC) app that shows how users can only perform specific tasks based on their assigned roles.It demonstrates the line of work that exist from admin,staff(doctors,nurses) and patient(default user). During registration, a default role(patient) is assigned if not specified .
 
 ### Roles
 
@@ -21,6 +21,7 @@ Healthcare-Access is a simple role-based access control (RBAC) app that shows ho
 - Go (Gin) 
 - Postgres
 - Bun ORM
+- Docker and docker-compose
 
 ### Setup and installation
 
@@ -41,7 +42,7 @@ go mod tidy
 
 - Start the application with
  ```sh
-go run main.go
+ docker-compose up --build
 ```
 The sever is listening on http://localhost:8000
 
@@ -58,7 +59,10 @@ The sever is listening on http://localhost:8000
 PATCH admin/appointments/:id
 GET admin/users
 ```
+```sh
+GET admin/users
 
+```
 - staff
 ```sh
 GET staff/appointments/assigned
@@ -70,3 +74,24 @@ GET staff/appointments/assigned
 POST /appointments/book-appointment
 ```
 
+### Example Request
+
+- assign a staff to an appointment
+```sh
+{
+	"user_id" : 6
+	"status_" : "assigned"
+}	
+```
+
+### Example Response
+```sh
+{
+ "appointment_id" : 2,
+ "patient_id" : 1,
+ "staff_id" : 3,
+ "status_" : "assigned"
+ "created_at" : 2025-03-05 14:30:15.123456789 +0000 UTC
+ "assigned_by" 5
+}
+```
