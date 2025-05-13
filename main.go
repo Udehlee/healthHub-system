@@ -7,14 +7,13 @@ import (
 	"github.com/Udehlee/healthcare-Access/internals/api/routes"
 	"github.com/Udehlee/healthcare-Access/internals/db"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-	loadEnv()
+	// loadEnv()
 
 	conn, err := db.InitDB()
 	if err != nil {
@@ -33,12 +32,12 @@ func main() {
 
 }
 
-func loadEnv() {
-	err := godotenv.Load("")
-	if err != nil {
-		log.Fatal("failed to load .env file")
-	}
+// func loadEnv() {
+// 	err := godotenv.Load(".env")
+// 	if err != nil {
+// 		log.Fatal("failed to load .env file")
+// 	}
 
-	log.Println("successfully loaded .env file ")
+// 	log.Println("successfully loaded .env file ")
 
-}
+// }
