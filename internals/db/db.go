@@ -99,7 +99,6 @@ func (c *Conn) AssignStaff(appointmentID int64, appointment *models.Appointment)
 		Model(appointment).
 		Set("staff_id = ?", appointment.StaffID).
 		Set("status_ = ?", appointment.Status).
-		// Set("staff_role = ?", appointment.StaffRole).
 		Set("assigned_by = ?", appointment.AssignedBy).
 		Where("appointment_id = ?", appointmentID).
 		Exec(c.Ctx)
