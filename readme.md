@@ -1,20 +1,13 @@
 ## healthcare-Access
-Healthcare-Access is a simple role-based access control (RBAC) app that shows how users can only perform specific tasks based on their assigned roles.It demonstrates the line of work that exist from admin,staff(doctors,nurses) and patient(default user). During registration, a default role(patient) is assigned if not specified .
+Healthcare-Access is a simple Role-Based Access Control (RBAC) app for managing healthcare appointments. It showcases how different users(admins, staff, and patients) have access to specific actions based on their roles.
 
 ### Roles
 
-### Admin
+- Admins can assign staff to appointments.
 
-- assigns a staff to a specific appointment
-- view all users and thier roles
+- User (Patient - the default role assigned during registration) can book appointments.
 
-### Staff
-
-- can view all assigned appointments
-
-### User (Patient)
-
-- can book appointment
+- Staff can view all assigned appointments.
 
 ### Technologies Used
 
