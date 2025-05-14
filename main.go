@@ -13,7 +13,6 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
-	// loadEnv()
 
 	conn, err := db.InitDB()
 	if err != nil {
@@ -26,7 +25,7 @@ func main() {
 	h := api.NewHandler(conn)
 	routes.Routes(r, h)
 
-	if err := r.Run(); err != nil {
+	if err := r.Run(":8000"); err != nil {
 		log.Fatalf("could not start server: %v", err)
 	}
 
